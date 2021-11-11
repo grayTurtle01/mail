@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
   // Send Email
-  document.querySelector('#compose-form').onsubmit = () =>{
+  document.querySelector('#compose-form').onsubmit = () => {
     let recipients = document.querySelector('#compose-recipients').value
     let subject = document.querySelector('#compose-subject').value
     let body = document.querySelector('#compose-body').value
@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
     .then( res => res.json())
     .then( data => console.log(data))  
 
+    load_mailbox('sent')
     return false
   }
 
@@ -51,4 +52,23 @@ function load_mailbox(mailbox) {
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+
+  // Show mails
+  fetch(`/emails/${mailbox}`)
+    .then( res => res.json() )
+    .then( mails => {
+      console.log(mails)
+      mails.forEach( mail => {
+
+        div = document.createElement('div')
+        div.className = 'mail'
+        
+        div.innerHTML = `<div><strong>${mail.recipients[0]} </strong> ${mail.subject} </div> <div>${mail.timestamp}</div> `
+        
+        document.querySelector('#emails-view').append(div)
+      })
+    })
+    .catch( error => console.log(error))
+
+
 }
