@@ -36,6 +36,7 @@ function compose_email() {
 
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#email-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
 
   // Clear out composition fields
@@ -48,6 +49,7 @@ function load_mailbox(mailbox) {
   
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
+  document.querySelector('#email-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'none';
 
   // Show the mailbox name
@@ -97,14 +99,25 @@ function showMail(){
     .then( res => res.json())
     .then( mail => {
       //console.log(mail)
-      document.querySelector('#emails-view').innerHTML = `
+
+      document.querySelector('#emails-view').style.display = 'none'
+      document.querySelector('#email-view').style.display = 'block'
+
+      document.querySelector('#email-view').innerHTML = `
         <h3 class="mb-3">View Email</h3>
         ${mail.sender }  ==>  ${mail.recipients[0]}
         <h5 class="mt-5">${mail.subject}</h5>
         <p>${mail.body}</p>
       `
-      
-
+      fetch(`/emails/${this.id}`, {
+        method : 'PUT',
+        body : JSON.stringify({
+          read: true
+        })
+      })
+        // .then( res => res.json() )
+        // .then( data => console.log(data))
+        // .catch( err => console.log(err))
     })
     .catch(err => console.log(err))
 }
