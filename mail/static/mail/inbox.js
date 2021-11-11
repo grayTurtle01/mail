@@ -150,9 +150,13 @@ function archive_mail(){
       archived: true
     })
   })
-  // .then( res => res.text())
-  // .then( data => console.log(data))
-  //load_mailbox('inbox')
+ 
+  mail = this.parentNode.parentNode
+  mail.addEventListener('animationend', () => {
+    mail.style.display = 'none'
+  })
+  mail.style.animationPlayState = 'running'
+
 }
 
 function un_archive_mail(){
@@ -162,8 +166,11 @@ function un_archive_mail(){
       archived: false
     })
   })
-  // .then( res => res.json())
-  // .then( data => console.log(data))
-  //load_mailbox('inbox')
+  
+  mail = this.parentNode.parentNode
+  mail.addEventListener('animationend', () => {
+    mail.style.display = 'none'
+  })
+  mail.style.animationPlayState = 'running'
 
 }

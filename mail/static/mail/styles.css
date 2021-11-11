@@ -7,8 +7,27 @@ textarea {
     padding: 3px;
     display: flex;
     justify-content: space-between;
+
+    animation-name : fadeout;
+    animation-duration: 1s;
+    animation-play-state: paused;
 }
 
 .readed{
     background-color: lightgray;
+}
+
+@keyframes fadeout{
+    0%{ 
+        opacity: 1;
+    }
+    75%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 0;
+        height: 0%;
+        padding: 0%;
+        border: 0px;
+    }
 }
