@@ -60,11 +60,27 @@ function load_mailbox(mailbox) {
       console.log(mails)
       mails.forEach( mail => {
 
-        div = document.createElement('div')
-        div.className = 'mail'
-        
-        div.innerHTML = `<div><strong>${mail.recipients[0]} </strong> ${mail.subject} </div> <div>${mail.timestamp}</div> `
-        
+        let div = document.createElement('div')
+        if( mail.read == false )
+          div.className = 'mail'
+        else
+          div.className = 'mail readed'
+ 
+        let left = document.createElement('div')
+        let right = document.createElement('div')
+
+        let email 
+        if( mailbox == 'inbox')
+          email = mail.sender
+        else if (mailbox == 'sent')
+          email = mail.recipients[0]
+
+        left.innerHTML = `<div><strong class="mr-3">${email} </strong> ${mail.subject} </div>`
+        right.innerHTML = `<div><span class='text-secondary'>${mail.timestamp}</span></div> `
+
+        div.append(left)
+        div.append(right)  
+
         document.querySelector('#emails-view').append(div)
       })
     })

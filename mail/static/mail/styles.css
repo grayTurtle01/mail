@@ -4,7 +4,11 @@ textarea {
 
 .mail {
     border: 1px solid black;
-    padding: 5px;
+    padding: 3px;
     display: flex;
     justify-content: space-between;
+}
+
+.readed{
+    background-color: lightgray;
 }
