@@ -61,6 +61,9 @@ function load_mailbox(mailbox) {
       mails.forEach( mail => {
 
         let div = document.createElement('div')
+        div.id = mail.id
+        div.onclick = showMail 
+
         if( mail.read == false )
           div.className = 'mail'
         else
@@ -87,4 +90,21 @@ function load_mailbox(mailbox) {
     .catch( error => console.log(error))
 
 
+}
+
+function showMail(){
+  fetch(`/emails/${this.id}`)
+    .then( res => res.json())
+    .then( mail => {
+      //console.log(mail)
+      document.querySelector('#emails-view').innerHTML = `
+        <h3 class="mb-3">View Email</h3>
+        ${mail.sender }  ==>  ${mail.recipients[0]}
+        <h5 class="mt-5">${mail.subject}</h5>
+        <p>${mail.body}</p>
+      `
+      
+
+    })
+    .catch(err => console.log(err))
 }
