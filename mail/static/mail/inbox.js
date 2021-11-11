@@ -59,12 +59,11 @@ function load_mailbox(mailbox) {
   fetch(`/emails/${mailbox}`)
     .then( res => res.json() )
     .then( mails => {
-      console.log(mails)
+      //console.log(mails)
       mails.forEach( mail => {
 
         let div = document.createElement('div')
-        div.id = mail.id
-        div.onclick = showMail 
+        
 
         if( mail.read == false )
           div.className = 'mail'
@@ -72,16 +71,38 @@ function load_mailbox(mailbox) {
           div.className = 'mail readed'
  
         let left = document.createElement('div')
+        left.id = mail.id
+        left.onclick = showMail
         let right = document.createElement('div')
 
         let email 
-        if( mailbox == 'inbox')
+        
+        if( mailbox == 'inbox'){
           email = mail.sender
+          archive_button = document.createElement('button')
+          archive_button.className = "archive"
+          archive_button.innerText = "Archive"
+          archive_button.id = mail.id
+          archive_button.onclick = archive_mail
+        }
         else if (mailbox == 'sent')
           email = mail.recipients[0]
 
+        else if( mailbox == 'archive'){
+          email = mail.sender
+          archive_button = document.createElement('button')
+          archive_button.className = "archive"
+          archive_button.innerText = "UnArchive"
+          archive_button.id = mail.id
+          archive_button.onclick = un_archive_mail
+        }
+
         left.innerHTML = `<div><strong class="mr-3">${email} </strong> ${mail.subject} </div>`
         right.innerHTML = `<div><span class='text-secondary'>${mail.timestamp}</span></div> `
+
+        if(mailbox == 'inbox' || mailbox == 'archive'){
+          right.append(archive_button)
+        }
 
         div.append(left)
         div.append(right)  
@@ -120,4 +141,29 @@ function showMail(){
         // .catch( err => console.log(err))
     })
     .catch(err => console.log(err))
+}
+
+function archive_mail(){
+  fetch(`/emails/${this.id}`,{
+    method: 'PUT',
+    body: JSON.stringify({
+      archived: true
+    })
+  })
+  // .then( res => res.text())
+  // .then( data => console.log(data))
+  //load_mailbox('inbox')
+}
+
+function un_archive_mail(){
+  fetch(`/emails/${this.id}`,{
+    method: 'PUT',
+    body: JSON.stringify({
+      archived: false
+    })
+  })
+  // .then( res => res.json())
+  // .then( data => console.log(data))
+  //load_mailbox('inbox')
+
 }
