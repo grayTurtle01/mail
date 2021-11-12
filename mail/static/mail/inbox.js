@@ -23,8 +23,8 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     .then( res => res.json())
     .then( data => console.log(data))  
-
-    load_mailbox('inbox')
+    .then( () =>  load_mailbox('sent') )
+   
     return false
   }
 
@@ -40,8 +40,8 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     .then( res => res.json())
     .then( data => console.log(data))
-
-    load_mailbox('inbox')
+    .then( () => load_mailbox('sent') )
+    
 
     return false
   }
@@ -105,7 +105,7 @@ function load_mailbox(mailbox) {
           archive_button.onclick = archive_mail
         }
         else if (mailbox == 'sent')
-          email = mail.recipients[0]
+          email = mail.recipients
 
         else if( mailbox == 'archive'){
           email = mail.sender
@@ -116,7 +116,7 @@ function load_mailbox(mailbox) {
           archive_button.onclick = un_archive_mail
         }
 
-        left.innerHTML = `<div><strong class="mr-3">${email} </strong> ${mail.subject} </div>`
+        left.innerHTML = `<div class="left"><strong class="mr-3">${email} </strong> ${mail.subject} </div>`
         right.innerHTML = `<div><span class='text-secondary mr-3' >${mail.timestamp}</span></div> `
 
         if(mailbox == 'inbox' || mailbox == 'archive'){
@@ -145,9 +145,10 @@ function showMail(){
 
       document.querySelector('#email-view').innerHTML = `
         <div class="col-lg-6">
-          <h3 class="mb-3">View Email</h3>
-          ${mail.sender }  ==>  ${mail.recipients[0]}
-          <h5 class="mt-5">${mail.subject}</h5>
+          <strong>From: </strong> ${mail.sender } <br>
+          <strong>To: </strong> ${mail.recipients} <br>
+          <strong>Subject: </strong> ${mail.subject} <br>
+          <strong>Timestamp: </strong> ${mail.timestamp} <br>
           <textarea style="height:300px; width:100%" disabled>${mail.body}</textarea>
           <br>
           <button class="btn btn-primary" data-id=${this.id} onclick=reply(this) style="float:right"> Reply </button>

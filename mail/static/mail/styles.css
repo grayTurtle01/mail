@@ -31,3 +31,7 @@ textarea {
         border: 0px;
     }
 }
+
+.left:hover{
+    cursor: pointer;
+}
