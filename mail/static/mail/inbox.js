@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
     .then( res => res.json())
     .then( data => console.log(data))  
 
-    load_mailbox('sent')
+    load_mailbox('inbox')
     return false
   }
 
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
     .then( res => res.json())
     .then( data => console.log(data))
 
-    load_mailbox('sent')
+    load_mailbox('inbox')
 
     return false
   }
@@ -144,11 +144,14 @@ function showMail(){
       document.querySelector('#email-view').style.display = 'block'
 
       document.querySelector('#email-view').innerHTML = `
-        <h3 class="mb-3">View Email</h3>
-        ${mail.sender }  ==>  ${mail.recipients[0]}
-        <h5 class="mt-5">${mail.subject}</h5>
-        <textarea cols=50 rows=5 disabled>${mail.body}</textarea>
-        <button class="btn btn-primary" data-id=${this.id} onclick=reply(this) > Reply </button>
+        <div class="col-lg-6">
+          <h3 class="mb-3">View Email</h3>
+          ${mail.sender }  ==>  ${mail.recipients[0]}
+          <h5 class="mt-5">${mail.subject}</h5>
+          <textarea style="height:300px; width:100%" disabled>${mail.body}</textarea>
+          <br>
+          <button class="btn btn-primary" data-id=${this.id} onclick=reply(this) style="float:right"> Reply </button>
+        </div>
       `
       fetch(`/emails/${this.id}`, {
         method : 'PUT',
