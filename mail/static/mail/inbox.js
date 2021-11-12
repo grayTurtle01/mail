@@ -99,7 +99,7 @@ function load_mailbox(mailbox) {
         if( mailbox == 'inbox'){
           email = mail.sender
           archive_button = document.createElement('button')
-          archive_button.className = "archive"
+          archive_button.className = "archive btn-secondary"
           archive_button.innerText = "Archive"
           archive_button.id = mail.id
           archive_button.onclick = archive_mail
@@ -110,17 +110,17 @@ function load_mailbox(mailbox) {
         else if( mailbox == 'archive'){
           email = mail.sender
           archive_button = document.createElement('button')
-          archive_button.className = "archive"
+          archive_button.className = "archive btn-secondary"
           archive_button.innerText = "UnArchive"
           archive_button.id = mail.id
           archive_button.onclick = un_archive_mail
         }
 
         left.innerHTML = `<div><strong class="mr-3">${email} </strong> ${mail.subject} </div>`
-        right.innerHTML = `<div><span class='text-secondary'>${mail.timestamp}</span></div> `
+        right.innerHTML = `<div><span class='text-secondary mr-3' >${mail.timestamp}</span></div> `
 
         if(mailbox == 'inbox' || mailbox == 'archive'){
-          right.append(archive_button)
+          right.firstChild.append(archive_button)
         }
 
         div.append(left)
@@ -171,7 +171,7 @@ function archive_mail(){
     })
   })
  
-  mail = this.parentNode.parentNode
+  mail = this.parentNode.parentNode.parentNode
   mail.addEventListener('animationend', () => {
     mail.style.display = 'none'
   })
@@ -187,7 +187,7 @@ function un_archive_mail(){
     })
   })
   
-  mail = this.parentNode.parentNode
+  mail = this.parentNode.parentNode.parentNode
   mail.addEventListener('animationend', () => {
     mail.style.display = 'none'
   })
