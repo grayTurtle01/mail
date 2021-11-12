@@ -12,4 +12,5 @@ urlpatterns = [
     path("emails", views.compose, name="compose"),
     path("emails/<int:email_id>", views.email, name="email"),
     path("emails/<str:mailbox>", views.mailbox, name="mailbox"),
+    path("delete_mails", views.delete_mails, name='delete_mails')
 ]

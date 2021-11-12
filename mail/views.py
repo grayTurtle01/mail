@@ -177,3 +177,16 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "mail/register.html")
+
+
+@csrf_exempt
+@login_required
+def delete_mails(request):
+
+    mails_ids = json.loads(request.body)
+
+    for id in mails_ids:
+        mail = Email.objects.filter(pk=id)
+        mail.delete()
+
+    return HttpResponse(f"mails erased" )

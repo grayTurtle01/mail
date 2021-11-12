@@ -5,12 +5,13 @@ textarea {
 .mail {
     border: 1px solid black;
     padding: 3px;
-    display: flex;
+    display: flex; 
     justify-content: space-between;
 
     animation-name : fadeout;
     animation-duration: 1s;
     animation-play-state: paused;
+
 }
 
 .readed{

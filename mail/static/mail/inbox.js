@@ -48,6 +48,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // By default, load the inbox
   load_mailbox('inbox');
+
+  
 });
 
 function compose_email() {
@@ -64,7 +66,8 @@ function compose_email() {
 }
 
 function load_mailbox(mailbox) {
-  
+  selected_mails_ids = []
+
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#email-view').style.display = 'none';
@@ -73,6 +76,8 @@ function load_mailbox(mailbox) {
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+
+  document.querySelector('#emails-view').innerHTML += `<div> <button onclick="delete_mails()" disabled id="delete"> Delete </button> </div>`
 
   // Show mails
   fetch(`/emails/${mailbox}`)
@@ -115,14 +120,15 @@ function load_mailbox(mailbox) {
           archive_button.id = mail.id
           archive_button.onclick = un_archive_mail
         }
-
+        div.innerHTML += `<div><input type="checkbox" data-id=${mail.id} onchange="addId(this)" > </div>`  
         left.innerHTML = `<div class="left"><strong class="mr-3">${email} </strong> ${mail.subject} </div>`
-        right.innerHTML = `<div><span class='text-secondary mr-3' >${mail.timestamp}</span></div> `
+        right.innerHTML = `<div><span class='text-secondary mr-3'>${mail.timestamp}</span></div> `
 
         if(mailbox == 'inbox' || mailbox == 'archive'){
           right.firstChild.append(archive_button)
         }
 
+        // div.append(checkbox)
         div.append(left)
         div.append(right)  
 
@@ -214,4 +220,28 @@ function reply(boton){
 
   document.querySelector('#email-view').style.display = 'none'
   document.querySelector('#replay-view').style.display = 'block'  
+}
+
+function addId(checkbox){
+  if( checkbox.checked ){
+    selected_mails_ids.push(checkbox.dataset.id)
+    document.querySelector('#delete').disabled = false
+  }
+  else{
+    selected_mails_ids = selected_mails_ids.filter(id => id != checkbox.dataset.id)
+    if( selected_mails_ids.length == 0 )
+        document.querySelector('#delete').disabled = true  
+  }
+  console.log(selected_mails_ids)
+}
+
+function delete_mails(){
+  //alert(selected_mails_ids)
+  fetch("/delete_mails",{
+    method: 'POST',
+    body: JSON.stringify(selected_mails_ids)
+  })
+    .then( res => res.text())
+    .then( data => console.log(data))
+    .then( () => load_mailbox('inbox'))
 }
