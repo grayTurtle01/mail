@@ -28,6 +28,24 @@ document.addEventListener('DOMContentLoaded', function() {
     return false
   }
 
+  // Replay Email
+  document.querySelector('#replay-form').onsubmit = () => {
+    fetch("/emails", {
+      method: 'POST',
+      body: JSON.stringify({
+        recipients: document.querySelector('#replay-recipients').value,
+        subject: document.querySelector('#replay-subject').value,
+        body: document.querySelector('#replay-body').value
+      })
+    })
+    .then( res => res.json())
+    .then( data => console.log(data))
+
+    load_mailbox('sent')
+
+    return false
+  }
+
   // By default, load the inbox
   load_mailbox('inbox');
 });
@@ -51,6 +69,7 @@ function load_mailbox(mailbox) {
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#email-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#replay-view').style.display = 'none';
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
@@ -128,7 +147,8 @@ function showMail(){
         <h3 class="mb-3">View Email</h3>
         ${mail.sender }  ==>  ${mail.recipients[0]}
         <h5 class="mt-5">${mail.subject}</h5>
-        <p>${mail.body}</p>
+        <textarea cols=50 rows=5 disabled>${mail.body}</textarea>
+        <button class="btn btn-primary" data-id=${this.id} onclick=reply(this) > Reply </button>
       `
       fetch(`/emails/${this.id}`, {
         method : 'PUT',
@@ -136,9 +156,6 @@ function showMail(){
           read: true
         })
       })
-        // .then( res => res.json() )
-        // .then( data => console.log(data))
-        // .catch( err => console.log(err))
     })
     .catch(err => console.log(err))
 }
@@ -173,4 +190,24 @@ function un_archive_mail(){
   })
   mail.style.animationPlayState = 'running'
 
+}
+
+function reply(boton){
+  const mail_ID = boton.dataset.id
+
+  fetch(`emails/${mail_ID}`)
+    .then( res => res.json() )
+    .then( mail => {
+      document.querySelector('#replay-recipients').value = mail.sender
+      document.querySelector('#replay-subject').value = `Re: ${mail.subject}`  
+      
+      body_message = `On ${mail.timestamp} ${mail.sender} wrote: \n ${mail.body} 
+      _________________________________________________`
+      document.querySelector('#replay-body').value = body_message
+
+    })
+
+
+  document.querySelector('#email-view').style.display = 'none'
+  document.querySelector('#replay-view').style.display = 'block'  
 }

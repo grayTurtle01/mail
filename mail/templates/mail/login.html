@@ -8,7 +8,7 @@
         <div>{{ message }}</div>
     {% endif %}
 
-    <form action="{% url 'login' %}" method="post">
+    <form action="{% url 'login' %}" method="post" class="col-lg-4">
         {% csrf_token %}
         <div class="form-group">
             <input autofocus class="form-control" type="email" name="email" placeholder="Email">
