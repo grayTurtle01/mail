@@ -33,6 +33,6 @@ textarea {
     }
 }
 
-.left:hover{
+.pointer:hover{
     cursor: pointer;
 }

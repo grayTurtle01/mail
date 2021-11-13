@@ -71,8 +71,11 @@ function load_mailbox(mailbox) {
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#email-view').style.display = 'none';
+  
   document.querySelector('#compose-view').style.display = 'none';
   document.querySelector('#replay-view').style.display = 'none';
+
+
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
@@ -96,7 +99,7 @@ function load_mailbox(mailbox) {
  
         let left = document.createElement('div')
         left.id = mail.id
-        left.onclick = showMail
+
         let right = document.createElement('div')
 
         let email 
@@ -119,10 +122,16 @@ function load_mailbox(mailbox) {
           archive_button.innerText = "UnArchive"
           archive_button.id = mail.id
           archive_button.onclick = un_archive_mail
-        }
-        div.innerHTML += `<div><input type="checkbox" data-id=${mail.id} onchange="addId(this)" > </div>`  
-        left.innerHTML = `<div class="left"><strong class="mr-3">${email} </strong> ${mail.subject} </div>`
-        right.innerHTML = `<div><span class='text-secondary mr-3'>${mail.timestamp}</span></div> `
+        }  
+        left.innerHTML = `<div>
+                              <input type="checkbox" data-id=${mail.id} onchange="addId(this)" > 
+                              <strong class="mr-3 ml-2 pointer" data-id=${mail.id}>${email} </strong>  
+                              <span class="pointer" data-id=${mail.id}>${mail.subject}</span> 
+                          </div>`
+
+        right.innerHTML = `<div>
+                              <span class='text-secondary mr-3 pointer' data-id=${mail.id}>${mail.timestamp}</span>
+                          </div> `
 
         if(mailbox == 'inbox' || mailbox == 'archive'){
           right.firstChild.append(archive_button)
@@ -132,7 +141,13 @@ function load_mailbox(mailbox) {
         div.append(left)
         div.append(right)  
 
+  
         document.querySelector('#emails-view').append(div)
+
+        // add showMail function
+        document.querySelectorAll('.pointer').forEach( element => {
+            element.onclick = showMail
+        })
       })
     })
     .catch( error => console.log(error))
@@ -140,8 +155,12 @@ function load_mailbox(mailbox) {
 
 }
 
+function testClick(){
+  console.log(this)
+}
+
 function showMail(){
-  fetch(`/emails/${this.id}`)
+  fetch(`/emails/${this.dataset.id}`)
     .then( res => res.json())
     .then( mail => {
       //console.log(mail)
@@ -157,10 +176,10 @@ function showMail(){
           <strong>Timestamp: </strong> ${mail.timestamp} <br>
           <textarea style="height:300px; width:100%" disabled>${mail.body}</textarea>
           <br>
-          <button class="btn btn-primary" data-id=${this.id} onclick=reply(this) style="float:right"> Reply </button>
+          <button class="btn btn-primary" data-id=${this.dataset.id} onclick=reply(this) style="float:right"> Reply </button>
         </div>
       `
-      fetch(`/emails/${this.id}`, {
+      fetch(`/emails/${this.dataset.id}`, {
         method : 'PUT',
         body : JSON.stringify({
           read: true
