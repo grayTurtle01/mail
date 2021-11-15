@@ -11,7 +11,7 @@ Mail Server Emulation
 - Sqlite3
 
 ## ScreenShot 📸
-![Mail ScreenShot](https://res.cloudinary.com/dqxtoises/image/upload/v1637005096/mail-screen_shoot_jsdnxm.png)
+![Mail ScreenShot](https://res.cloudinary.com/dqxtoises/image/upload/v1637006468/mail-screen_shoot_2_b1tc8u.png)
 
 ## Demos 🎥
 <a href="https://youtu.be/EWO5gRYqM6g" target=_blank>Video</a>
