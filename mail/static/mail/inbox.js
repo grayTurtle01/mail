@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', function() {
     let subject = document.querySelector('#compose-subject').value
     let body = document.querySelector('#compose-body').value
     
+    let message = ''
+    let error = ''
+
     fetch("/emails", {
       method: 'POST',
       body: JSON.stringify({
@@ -22,14 +25,33 @@ document.addEventListener('DOMContentLoaded', function() {
       })
     })
     .then( res => res.json())
-    .then( data => console.log(data))  
-    .then( () =>  load_mailbox('sent') )
-   
+    .then( data => {
+      console.log(data)
+      message = data.message
+      error = data.error
+    })  
+    .then( () => load_mailbox('sent'))
+    .then( () => {
+      alerta = document.querySelector('#alert')
+      if( error ){
+        alerta.className = "alert alert-danger"
+        alerta.innerHTML = error
+      }
+      else if( message ){
+        console.log(message)
+        alerta.className = "alert alert-success"
+        alerta.innerHTML = message
+
+      }
+    })
+
     return false
   }
 
   // Replay Email
   document.querySelector('#replay-form').onsubmit = () => {
+    let message = ''
+
     fetch("/emails", {
       method: 'POST',
       body: JSON.stringify({
@@ -39,8 +61,16 @@ document.addEventListener('DOMContentLoaded', function() {
       })
     })
     .then( res => res.json())
-    .then( data => console.log(data))
+    .then( data => {
+      console.log(data)
+      message = data.message
+    })
     .then( () => load_mailbox('sent') )
+    .then( () => {
+      let alerta = document.querySelector('#alert')
+      alerta.innerHTML = message
+      alerta.className = 'alert alert-success'
+    })
     
 
     return false
@@ -63,6 +93,10 @@ function compose_email() {
   document.querySelector('#compose-recipients').value = '';
   document.querySelector('#compose-subject').value = '';
   document.querySelector('#compose-body').value = '';
+
+  // Focus compose-recipients
+  document.querySelector('#compose-recipients').focus()
+
 }
 
 function load_mailbox(mailbox) {
@@ -79,6 +113,9 @@ function load_mailbox(mailbox) {
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+
+  // Alert Message
+  document.querySelector('#emails-view').innerHTML += `<div id="alert"></div>`
 
   document.querySelector('#emails-view').innerHTML += `<div> <button onclick="delete_mails()" disabled id="delete"> Delete </button> </div>`
 
@@ -203,6 +240,10 @@ function archive_mail(){
   })
   mail.style.animationPlayState = 'running'
 
+  // alerta = document.querySelector('#alert')
+  // alerta.innerHTML = "Mail Archived"
+  // alerta.className = "alert alert-success"
+
 }
 
 function un_archive_mail(){
@@ -216,6 +257,10 @@ function un_archive_mail(){
   mail = this.parentNode.parentNode.parentNode
   mail.addEventListener('animationend', () => {
     mail.style.display = 'none'
+
+    // alerta = document.querySelector('#alert')
+    // alerta.innerHTML = "Mail Unarchived"
+    // alerta.className = "alert alert-success"
   })
   mail.style.animationPlayState = 'running'
 
@@ -251,7 +296,7 @@ function addId(checkbox){
     if( selected_mails_ids.length == 0 )
         document.querySelector('#delete').disabled = true  
   }
-  console.log(selected_mails_ids)
+  // console.log(selected_mails_ids)
 }
 
 function delete_mails(){
