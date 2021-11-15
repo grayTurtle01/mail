@@ -17,8 +17,15 @@ Mail Server Emulation
 <a href="https://youtu.be/EWO5gRYqM6g" target=_blank>Video</a>
 
 ## Setup 🖥️
+`git clone https://github.com/grayTurtle01/mail.git`
+
+`cd mail`
 
 `pip install -r requiremets.txt`
+
+`python manage.py makemigrations`
+
+`python manage.py migrate`
 
 `python manage.py runserver`
 
