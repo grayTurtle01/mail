@@ -116,14 +116,16 @@ function load_mailbox(mailbox) {
 
   // Alert Message
   document.querySelector('#emails-view').innerHTML += `<div id="alert"></div>`
-
+  
+  // Delete Mails
   document.querySelector('#emails-view').innerHTML += `<div> <button onclick="delete_mails()" disabled id="delete"> Delete </button> </div>`
+  
 
   // Show mails
   fetch(`/emails/${mailbox}`)
     .then( res => res.json() )
     .then( mails => {
-      //console.log(mails)
+
       mails.forEach( mail => {
 
         let div = document.createElement('div')
@@ -192,9 +194,6 @@ function load_mailbox(mailbox) {
 
 }
 
-function testClick(){
-  console.log(this)
-}
 
 function showMail(){
   fetch(`/emails/${this.dataset.id}`)
@@ -273,8 +272,12 @@ function reply(boton){
     .then( res => res.json() )
     .then( mail => {
       document.querySelector('#replay-recipients').value = mail.sender
-      document.querySelector('#replay-subject').value = `Re: ${mail.subject}`  
-      
+
+      if(mail.subject.slice(0,3) == 'Re:')
+        document.querySelector('#replay-subject').value = `${mail.subject}`  
+      else
+        document.querySelector('#replay-subject').value = `Re: ${mail.subject}`  
+
       body_message = `On ${mail.timestamp} ${mail.sender} wrote: \n ${mail.body} 
       _________________________________________________`
       document.querySelector('#replay-body').value = body_message
