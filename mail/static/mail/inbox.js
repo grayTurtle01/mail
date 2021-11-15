@@ -104,8 +104,8 @@ function load_mailbox(mailbox) {
 
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
-  document.querySelector('#email-view').style.display = 'none';
   
+  document.querySelector('#email-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'none';
   document.querySelector('#replay-view').style.display = 'none';
 
@@ -118,7 +118,9 @@ function load_mailbox(mailbox) {
   document.querySelector('#emails-view').innerHTML += `<div id="alert"></div>`
   
   // Delete Mails
-  document.querySelector('#emails-view').innerHTML += `<div> <button onclick="delete_mails()" disabled id="delete"> Delete </button> </div>`
+  document.querySelector('#emails-view').innerHTML += `<div>
+  <button onclick="delete_mails(this)" disabled id="delete" data-mailbox=${mailbox}> Delete </button>
+  </div>`
   
 
   // Show mails
@@ -302,7 +304,7 @@ function addId(checkbox){
   // console.log(selected_mails_ids)
 }
 
-function delete_mails(){
+function delete_mails(obj){
   //alert(selected_mails_ids)
   fetch("/delete_mails",{
     method: 'POST',
@@ -310,5 +312,8 @@ function delete_mails(){
   })
     .then( res => res.text())
     .then( data => console.log(data))
-    .then( () => load_mailbox('inbox'))
+    .then( () => {
+      let mailbox = obj.dataset.mailbox
+      load_mailbox(mailbox)
+      })
 }
