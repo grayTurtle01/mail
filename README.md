@@ -10,8 +10,8 @@ Mail Server Emulation
 - Django
 - Sqlite3
 
-## ScreenShot
+## ScreenShot 📸
 
-## Demos
+## Demos 🎥
 
-## Setup
+## Setup 🖥️
