@@ -9,6 +9,7 @@ Mail Server Emulation
 - Python
 - Django
 - Sqlite3
+- Heroku
 
 ## ScreenShot 📸
 ![Mail ScreenShot](https://res.cloudinary.com/dqxtoises/image/upload/v1637006772/mail_screen_shoot-3_xcabsb.png)
