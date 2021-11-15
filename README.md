@@ -17,3 +17,9 @@ Mail Server Emulation
 <a href="https://youtu.be/EWO5gRYqM6g" target=_blank>Video</a>
 
 ## Setup 🖥️
+
+`pip install -r requiremets.txt`
+
+`python manage.py runserver`
+
+`localhost:8000`
