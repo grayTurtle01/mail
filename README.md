@@ -11,7 +11,7 @@ Mail Server Emulation
 - Sqlite3
 - Heroku
 
-## ScreenShot 📸
+## ScreenShoot 📸
 ![Mail ScreenShot](https://res.cloudinary.com/dqxtoises/image/upload/v1637006772/mail_screen_shoot-3_xcabsb.png)
 
 ## Demos 🎥
