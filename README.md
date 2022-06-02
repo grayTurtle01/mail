@@ -17,7 +17,7 @@ Mail Server Emulation
 ## Demos 🎥
 <a href="https://youtu.be/EWO5gRYqM6g" target=_blank>Video</a> 📹
 
-[Deploy](https://magic-mail.herokuapp.com/) 🚀
+~~[Deploy](https://magic-mail.herokuapp.com/) 🚀~~
 
 ## Setup 🖥️
 `git clone https://github.com/grayTurtle01/mail.git`
